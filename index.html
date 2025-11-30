@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Đăng Nhập</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffdeea, #c7a0d5, #c7a0d5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(33, 150, 243, 0.1);
+            overflow: hidden;
+        }
+        
+        .welcome-section {
+            flex: 1;
+            background: linear-gradient(135deg, #a997bf, #a4afe7);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .welcome-section p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        /* CSS cho ảnh admin */
+        .admin-image {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .admin-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .admin-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .admin-title {
+            margin-top: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .form-section {
+            flex: 1;
+            padding: 50px 40px;
+        }
+        
+        .form-container {
+            width: 100%;
+        }
+        
+        .form-title {
+            color: #563e62;
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .creator {
+            color: #563e62;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+            font-style: italic;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #b08bd9;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(176, 139, 217, 0.2);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #d5b1d5, #d9c6e5);
+            color: #563e62;
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(135deg, #c9a0c9, #cdb8e0);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(213, 177, 213, 0.4);
+            color: white;
+        }
+        
+        .register-btn {
+            background: transparent;
+            color: #d5b1d5;
+            border: 2px solid #d9c6e5;
+            font-weight: 600;
+        }
+        
+        .register-btn:hover {
+            background: #ffdeea;
+            transform: translateY(-2px);
+            color: #563e62;
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .success {
+            background-color: #f0e6f0;
+            color: #563e62;
+            border: 1px solid #d9c6e5;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f8c8dc, #f5b6d0);
+            color: #563e62;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .register-form {
+            display: none;
+        }
+        
+        .back-to-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link {
+            color: #b08bd9;
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .welcome-section {
+                padding: 30px 25px;
+            }
+            
+            .form-section {
+                padding: 30px 25px;
+            }
+            
+            .admin-avatar {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Phần chào mừng -->
+        <div class="welcome-section">
+            <h1>Chào Mừng Các Cu Em</h1>
+            <p>Đến với hệ thống đăng nhập của anh. Đăng nhập để check web ok （￣︶￣）↗　.</p>
+            
+            <!-- ẢNH ADMIN - THAY LINK ẢNH CỦA BẠN VÀO ĐÂY -->
+            <div class="admin-image">
+                <img src="https://i.pinimg.com/736x/2c/68/17/2c6817f5f2d601d151db80555be97bed.jpg" alt="Ảnh Admin" class="admin-avatar">
+                <div class="admin-title">Admin Cute Phô Mai Que</div>
+            </div>
+            
+            <div class="admin-badge">Tài khoản tự tạo (*/ω＼*)</div>
+        </div>
+        
+        <!-- Phần form -->
+        <div class="form-section">
+            <!-- Form đăng nhập -->
+            <div class="form-container" id="loginFormContainer">
+                <h2 class="form-title">Đăng Nhập</h2>
+                <div class="creator">Web by Giang Anh UwU ☆*: .｡. o(≧▽≦)o .｡.:*☆</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập:</label>
+                        <input type="text" id="username" name="username" required placeholder="Nhập tên đăng nhập">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Mật khẩu:</label>
+                        <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rememberMe"> Ghi nhớ đăng nhập
+                        </label>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="login-btn">Đăng Nhập</button>
+                        <button type="button" class="register-btn" onclick="showRegisterForm()">Đăng Ký</button>
+                    </div>
+                </form>
+                
+                <div id="loginResult" class="result"></div>
+            </div>
+            
+            <!-- Form đăng ký -->
+            <div class="form-container register-form" id="registerFormContainer">
+                <h2 class="form-title">Đăng Ký</h2>
+                <div class="creator"><strong>Web by Giang Anh UwU (●'◡'●) </strong></div>
+                
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regUsername">Tên đăng nhập:</label>
+                        <input type="text" id="regUsername" name="regUsername" required placeholder="Tạo tên đăng nhập">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail">Email:</label>
+                        <input type="email" id="regEmail" name="regEmail" required placeholder="Nhập email của bạn">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regPassword">Mật khẩu:</label>
+                        <input type="password" id="regPassword" name="regPassword" required placeholder="Tạo mật khẩu">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Xác nhận mật khẩu:</label>
+                        <input type="password" id="regConfirmPassword" name="regConfirmPassword" required placeholder="Nhập lại mật khẩu">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rememberReg"> Ghi nhớ đăng nhập
+                        </label>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="login-btn">Đăng Ký</button>
+                        <button type="button" class="register-btn" onclick="showLoginForm()">Hủy</button>
+                    </div>
+                </form>
+                
+                <div class="back-to-login">
+                    <a class="back-link" onclick="showLoginForm()">← Quay lại đăng nhập</a>
+                </div>
+                
+                <div id="registerResult" class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+   
+        let users = [
+            { username: 'admin', password: '123456', email: 'admin@system.com' }
+        ];
+
+        
+        function saveLoginInfo(username, password, remember) {
+            if (remember) {
+                localStorage.setItem('savedUsername', username);
+                localStorage.setItem('savedPassword', password);
+                localStorage.setItem('rememberMe', 'true');
+            } else {
+                localStorage.removeItem('savedUsername');
+                localStorage.removeItem('savedPassword');
+                localStorage.setItem('rememberMe', 'false');
+            }
+        }
+
+       
+        function loadSavedLoginInfo() {
+            const rememberMe = localStorage.getItem('rememberMe');
+            if (rememberMe === 'true') {
+                const savedUsername = localStorage.getItem('savedUsername');
+                const savedPassword = localStorage.getItem('savedPassword');
+                
+                if (savedUsername && savedPassword) {
+                    document.getElementById('username').value = savedUsername;
+                    document.getElementById('password').value = savedPassword;
+                    document.getElementById('rememberMe').checked = true;
+                }
+            }
+        }
+
+      
+        function saveRegistrationInfo(username, email, remember) {
+            if (remember) {
+                localStorage.setItem('regUsername', username);
+                localStorage.setItem('regEmail', email);
+                localStorage.setItem('rememberReg', 'true');
+            } else {
+                localStorage.removeItem('regUsername');
+                localStorage.removeItem('regEmail');
+                localStorage.setItem('rememberReg', 'false');
+            }
+        }
+
+       
+        function loadSavedRegistrationInfo() {
+            const rememberReg = localStorage.getItem('rememberReg');
+            if (rememberReg === 'true') {
+                const regUsername = localStorage.getItem('regUsername');
+                const regEmail = localStorage.getItem('regEmail');
+                
+                if (regUsername) document.getElementById('regUsername').value = regUsername;
+                if (regEmail) document.getElementById('regEmail').value = regEmail;
+                document.getElementById('rememberReg').checked = true;
+            }
+        }
+
+      
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const resultDiv = document.getElementById('loginResult');
+            
+            saveLoginInfo(username, password, rememberMe);
+            
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                resultDiv.innerHTML = '🎉 <strong>Đăng nhập thành công!</strong> Chào mừng đã đến xứ sở wibu <strong>' + username + '</strong>!';
+                resultDiv.className = 'result success';
+               
+                if (username === 'admin') {
+                    setTimeout(() => {
+                        alert('🌟 Bạn sẽ đăng nhập với tư cách là admin web ola😁💖😏🥸🤫🐔📞💀');
+                    }, 500);
+                }
+            } else {
+                resultDiv.innerHTML = '❌ <strong>Sai tên đăng nhập hay mật khẩu rồi bạn ei!</strong>';
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.style.display = 'block';
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const rememberReg = document.getElementById('rememberReg').checked;
+            const resultDiv = document.getElementById('registerResult');
+            
+      
+            saveRegistrationInfo(username, email, rememberReg);
+            
+      
+            if (users.find(u => u.username === username)) {
+                resultDiv.innerHTML = '❌ <strong>Tên đăng nhập đã tồn tại!</strong>';
+                resultDiv.className = 'result error';
+            } else if (password !== confirmPassword) {
+                resultDiv.innerHTML = '❌ <strong>Mật khẩu xác nhận không khớp!</strong>';
+                resultDiv.className = 'result error';
+            } else if (password.length < 6) {
+                resultDiv.innerHTML = '❌ <strong>Mật khẩu phải có ít nhất 6 ký tự!</strong>';
+                resultDiv.className = 'result error';
+            } else {
+           
+                users.push({ username, password, email });
+                resultDiv.innerHTML = '✅ <strong>Đăng ký thành công!</strong> Bạn có thể đăng nhập ngay.';
+                resultDiv.className = 'result success';
+                
+
+                if (!rememberReg) {
+                    document.getElementById('registerForm').reset();
+                }
+                
+                setTimeout(() => {
+                    showLoginForm();
+                    document.getElementById('username').value = username;
+                    document.getElementById('password').value = password;
+                }, 2000);
+            }
+            
+            resultDiv.style.display = 'block';
+        });
+
+        function showRegisterForm() {
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('registerFormContainer').style.display = 'block';
+            document.getElementById('registerResult').style.display = 'none';
+            loadSavedRegistrationInfo();
+        }
+
+        function showLoginForm() {
+            document.getElementById('registerFormContainer').style.display = 'none';
+            document.getElementById('loginFormContainer').style.display = 'block';
+            document.getElementById('loginResult').style.display = 'none';
+            loadSavedLoginInfo();
+        }
+
+        window.onload = function() {
+            loadSavedLoginInfo();
+            document.getElementById('username').focus();
+        }
+    </script>
+</body>
+</html>
